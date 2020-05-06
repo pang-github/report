@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>宁寿堂</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/plugin/weui/css/weui.css"/>
+    <link rel="stylesheet" href="/plugin/weui/css/weuix.css"/>
+    <link rel="stylesheet" href="/plugin/layui/css/layui.css" media="all">
+    <script src="/plugin/weui/js/jquery.min.js"></script>
+    <script src="/plugin/weui/js/zepto.min.js"></script>
+    <script src="/plugin/weui/js/zepto.weui.js"></script>
+
+    <style>
+        body{ background:#eee; }
+        .hint-val{
+            background:#5a87cc;
+            /*padding:3px 8px;*/
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            border-radius: 50%;
+            color:#fff;
+            font-size: 14px;
+        }
+
+
+    </style>
+
+
+</head>
+
+<body>
+<div id="app">
+
+    <div class="weui-cells">
+        <a v-if="patientId" class="weui-cell weui-cell_access" style="height:60px;" href="/weixin/consultPatient" >
+            <div class="weui-cell__bd">
+                <div class="weui-cells__title">就诊人信息</div>
+                <p>{{patientId}}</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a v-else class="weui-cell weui-cell_access" style="height:60px;" href="/weixin/consultPatient" >
+            <div class="weui-cell__hd"><img src="/plugin/weui/images/icon_plus.png" width="25" height="25"></div>
+            <div class="weui-cell__bd">
+                <p>就诊人信息</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a v-if="doctor" class="weui-cell weui-cell_access" style="height:60px;" href="/weixin/consultdoctor" >
+            <div class="weui-cell__bd">
+                <div class="weui-cells__title">医师信息</div>
+                <p>{{doctor}}</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a v-else class="weui-cell weui-cell_access" style="height:60px;" href="/weixin/consultdoctor">
+            <div class="weui-cell__hd"><img src="/plugin/weui/images/icon_plus.png" width="25" height="25"></div>
+            <div class="weui-cell__bd">
+                <p>医师信息</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+
+    </div>
+
+    <div class="weui-cells">
+
+        <div class="weui-gallery" id="gallery" >
+            <span class="weui-gallery__img" id="galleryImg" style="background-image:url(./images/pic_160.png)"></span>
+            <div class="weui-gallery__opr">
+                <a href="javascript:" class="weui-gallery__del">
+                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="weui-cells weui-cells_form" >
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">图片上传</p>
+                            <div class="weui-uploader__info">0/9</div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles">
+
+                                <!--<li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(images/temp/1.jpg)">
+                                    <div class="weui-uploader__file-content">
+                                        <i class="weui-icon-warn"></i>
+                                    </div>
+                                </li>
+                                <li class="weui-uploader__file weui-uploader__file_status" style="background-image:url(images/temp/2.jpg)">
+                                    <div class="weui-uploader__file-content">50%</div>
+                                </li>-->
+                            </ul>
+                            <div class="weui-uploader__input-box">
+                                <input id="uploaderInput" class="weui-uploader__input" type="file" name="file" accept="image/*" multiple="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<form enctype="multipart/form-data" method="post" action="/weixin/upload">
+            文件:<input type="file" name="file"/>
+            <input type="submit" value="上传"/>
+        </form>-->
+    </div>
+
+    <div class="weui-cells">
+    <div class="weui_cells_title">选择类型</div>
+    <div class="weui_cells">
+        <div class="weui_cell">
+            <div class="page-bd-15">
+                <div class="weui-label-list">
+                    <span  v-for="(value, index) in drugType">
+                        <input class="weui-form-checkbox" name="classId" :id="setg(index)" type="radio">
+                        <label :for="setg(index)" >
+                            <ico class="weui-icon-radio"></ico>
+                            <div class="weui-form-text"><p>{{value.name}}</p></div>
+                        </label>
+                        <span v-if="(index+1)%2==0"><br></span>
+                </span>
+            </div>
+
+        </div>
+    </div>
+    </div>
+        <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__hd" style="width:90px;">添加付数</div>
+
+            <div class="weui-cell__hd" style="width:100px;" >
+                <input class="weui-input" style="width:100px;"  type="number" pattern="[0-9]*" placeholder="请输入付数" >
+            </div>
+            <div class="weui-cell__hd">付</div>
+
+        </div>
+
+    </div>
+        <div class="weui-cells__title">备注</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" id="weui-textarea" onkeyup="astrict()"  placeholder="请输入200字以内" maxlength="200" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span id="astrict-sl">0</span>/200</div>
+                </div>
+            </div>
+        </div>
+
+
+    <div style="padding:10px;">
+        <a href="javascript:;" class="weui-btn weui-btn_primary">提 交</a>
+    </div>
+
+    </div>
+
+
+</div>
+<script src="/plugin/vue/vue.min.js"></script>
+<script src="/modular/js/weui_util.js"></script>
+<script src="/plugin/layui/layui.all.js"></script>
+
+<script>
+    var mv = new Vue({
+        el: '#app',
+        data: {
+            msg: 'Hello World!',
+            info:'',
+            dept:'',
+            fileIds:'',
+            patientId:"",
+            imageList:[],
+            drugType:[],
+            doctor:'',
+        },
+        methods: {
+            getDic:async function(){
+                var patientType = '922ca8dbd9b1307029d26d0bb6d0134f';
+               weUtil.post("/weixin/getDictList",{"drugTypeId":patientType},function(res){
+                   vm.drugType = res;
+               })
+
+            },
+            setg:function(index){
+                return"g"+index
+            },
+            upload:function(){
+                var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',
+                    $gallery = $("#gallery"), $galleryImg = $("#galleryImg"),
+                    $uploaderInput = $("#uploaderInput"),
+                    $uploaderFiles = $("#uploaderFiles");
+
+                $uploaderInput.on("change", function(e){
+                    var src, url = window.URL || window.webkitURL || window.mozURL, files = e.target.files;
+                    for (var i = 0, len = files.length; i < len; ++i) {
+                        var file = files[i];
+
+                        if (url) {
+                            src = url.createObjectURL(file);
+                        } else {
+                            src = e.target.result;
+                        }
+                        $.ajax({
+                            headers: {
+                                'token':weUtil.getCookie("token")
+                            },
+                            url: "/weixin/upload",
+                            data: file,
+                            processData: false, //因为data值是FormData对象，不需要对数据做处理。
+
+                            type: "POST",
+                            dataType:'multiple',
+                            success: function (ret) {
+                                alert(ret)
+                            }
+                        })
+                        $uploaderFiles.append($(tmpl.replace('#url#', src)));
+                    }
+                });
+                $uploaderFiles.on("click", "li", function(){
+                    $galleryImg.attr("style", this.getAttribute("style"));
+                    $gallery.fadeIn(100);
+                });
+                $gallery.on("click", function(){
+                    $gallery.fadeOut(100);
+                });
+
+
+            },
+        },
+
+        computed:{
+            getfileIds(){
+                var fileIds = '';
+                var list = vm.imageList;
+                if(app.isNotEmpty(list)){
+                    for(let img of list){
+                        fileIds += img.fileId+",";
+                    }
+                    fileIds = fileIds.slice(0,fileIds.length-1);
+                }
+                return fileIds;
+            }
+        },
+        mounted:async function() {
+            vm = this;
+            vm.getDic();
+
+            var patient = sessionStorage.getItem("consult_patient")
+            var doctor = sessionStorage.getItem("consult_doctor")
+            if(weUtil.isNotEmpty(patient)){
+                var sit = patient.split(",")
+                vm.patientId = sit[1]+" "+sit[2]+" "+sit[3]+sit[4]
+            };
+            if(weUtil.isNotEmpty(doctor)){
+                var sit = doctor.split(",")
+                vm.doctor = sit[1]+""+sit[2]
+            };
+            vm.upload();
+
+
+
+        },
+
+    })
+
+
+
+</script>
+
+</body>
+</html>

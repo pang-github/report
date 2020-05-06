@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>宁寿堂</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/plugin/weui/css/weui.css"/>
+    <link rel="stylesheet" href="/plugin/weui/css/weuix.css"/>
+    <script src="/plugin/weui/js/jquery.min.js"></script>
+    <script src="/plugin/weui/js/zepto.min.js"></script>
+    <script src="/plugin/weui/js/zepto.weui.js"></script>
+
+</head>
+<style>
+    html,body{ background:#f4f4f4; }
+    .weui-cells{ font-size: 15px; }
+    .head{
+        text-align: center;
+        height: 45px;
+        line-height: 45px;
+        box-shadow: 0 1px 1px 1px #e4e4e4;
+        background:#fff;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+    }
+    .head .return{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 45px;
+        height: 45px;
+    }
+    .head .return:after{
+        content: " ";
+        display: inline-block;
+        height: 13px;
+        width: 13px;
+        border-width: 2px 2px 0 0;
+        border-color: #C8C8CD;
+        border-style: solid;
+        -webkit-transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+        transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+        position: absolute;
+        transform:rotate(225deg);
+        left: 16px;
+        top: 14px;
+    }
+    .head .operation{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 60px;
+        height: 45px;
+        color:#00d26d;
+    }
+
+    .weui-panel__bd{
+        margin-bottom: 10px;
+    }
+    .desc{
+        font-size: 14px;
+        color: #333333;
+
+    }
+
+    .desc span{
+        color: #777777;
+        font-size:14px;
+    }
+</style>
+<body>
+<div id="app">
+    <div class="head"><a href="/weixin/consult" class="return"></a></div>
+
+    <div style="padding-top: 40px;">
+        <div v-if="patient.patientName ==''">
+            <div class="weui_cells" style="text-align:center; padding-top: 50px">
+                <div class="weui cell" >
+                    <span @click="update" style="color: #0BB20C">点击完善个人信息</span>
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <div class="weui-cells weui-cells_radio">
+                <label class="weui-cell weui-check__label" for="x11" @click="addpatient(patient)">
+                    <div class="weui-cell__ft">
+                        <input class="weui-check" v-model="patient.id" name="radio1" id="x11" :value="getid()" type="radio">
+                        <span class="weui-icon-checked"></span>
+                    </div>
+                        <div class=" weui-media-box_text">
+                            <h4 class="weui-media-box__title">{{patient.patientName}}</h4>
+                            <p class="weui-media-box__desc">{{patient.phoneNumber}}</p>
+                            <ul class="weui-media-box__desc">
+                                <span v-if="patient.patientSex==1">男</span>
+                                <span v-if="patient.patientSex==2">女</span>
+                                <span>{{patient.patientAge}}</span>
+                            </ul>
+                        </div>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/plugin/vue/vue.min.js"></script>
+<script src="/modular/js/weui_util.js"></script>
+<script src="/modular/weixin/auth.js"></script>
+
+<script>
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            msg: 'Hello World!',
+            patient:{},
+            pat:"",
+            patientList:[]
+        },
+        methods: {
+
+            update:function(){
+                location.href = "/weixin/updatePersonal"
+            },
+            addpatient:function(patient){
+                var sex = ""
+                if(patient.patientSex=="1"){
+                    sex="男"
+                }if(patient.patientSex=="2"){
+                    sex="女"
+                }
+                var patients = patient.id+","+patient.patientName+","+sex+","+patient.patientAge+","+patient.phoneNumber+","+patient.blcjz
+                //weUtil.setCookie("medPatient",patients,1)
+                sessionStorage.setItem('consult_patient', patients);
+            },
+            getid:function(){
+                //weUtil.clearCookie("medPatient")
+
+                var patient = sessionStorage.getItem("consult_patient")
+                if(weUtil.isNotEmpty(patient)){
+                    var id = patient.split(",")
+                    console.log(id[0]);
+                    return id[0];
+                }
+
+            }
+        },
+        mounted:async function() {
+            vm = this;
+            weUtil.post("/weixin/getByPatient",{},function (res) {
+                if(weUtil.isNotEmpty(res)){
+                    vm.patient = res;
+                    vm.patient.patientAge = res.patientAge+"岁"
+                }else{
+                    $.alert("没有找到您的患者信息！", "",function(){
+                        location.href = "/weixin"
+                    });
+                }
+
+
+            })
+            //this.resetSetItem('watchStorage', "6");
+
+        },
+        updated: function () {
+
+        }
+    })
+
+</script>
+
+</body>
+</html>

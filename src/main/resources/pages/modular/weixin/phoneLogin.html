@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/plugin/weui/css/weui.css"/>
+    <link rel="stylesheet" href="/plugin/weui/css/weuix.css"/>
+    <script src="/plugin/weui/js/jquery.min.js"></script>
+    <script src="/plugin/weui/js/zepto.min.js"></script>
+    <script src="/plugin/weui/js/zepto.weui.js"></script>
+    <script src="/modular/weixin/auth.js"></script>
+
+
+
+
+</head>
+<style>
+    .logo {
+        margin: 0 auto;
+        padding: 6% 8% 2% 8%;
+        text-align: center;
+    }
+
+    .logo img {
+        width: 35%;
+    }
+
+    .weui-cell{
+        min-height: 40px;
+    }
+</style>
+<body>
+
+<div id="app">
+
+    <div class="logo">
+        <img class="logo" src="/common/images/ningshoutang.jpg" alt="">
+    </div>
+
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+            <div class="weui-cell__bd weui-cell_primary"><input type="tel" v-model="info.phone" class="weui-input" placeholder="手机号"/></div>
+        </div>
+
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">验证码</label></div>
+            <div class="weui-cell__bd weui-cell_primary"><input type="text" v-model="info.code" class="weui-input" placeholder="验证码"/></div>
+            <a href="javascript:;" @click="sendcode" class="weui-btn weui-btn_primary">{{text}}</a>
+        </div>
+    </div>
+
+    <div class="weui-cells__tips"></div>
+    <div class="weui-btn-area">
+        <button type="button" @click="loginphone" class="weui-btn weui-btn_primary">登录</button>
+    </div>
+
+    <span style="width:90px;float: right;color: #07C160;" @click="open" >账号登录</span>
+
+
+
+</div>
+
+
+<script src="/plugin/vue/vue.min.js"></script>
+
+<script src="/modular/js/weui_util.js"></script>
+<script>
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            msg: 'Hello World!',
+            info:{},
+            verify:"",
+            redcoler:"",
+            text:'发送验证码',
+            isSend: false
+        },
+        methods: {
+            loginphone:function () {
+                if(weUtil.isEmpty(vm.info.phone)){
+                    weUtil.msg("请输入手机号");
+                    return;
+                }else if(weUtil.isEmpty(vm.info.code)){
+                    weUtil.msg("请输入验证码");
+                    return;
+                }
+
+                vm.info.openId = weUtil.getUrlParam("openId");
+                weUtil.post("/weixin/phoneLoginSub",{"mobile":vm.info.phone,"code":vm.info.code,"openId":vm.info.openId},function (res) {
+                    weUtil.setCookie("token",res.token,30);
+                    weUtil.setCookie("isDoctor",res.isDoctor,30);
+                    location.href = "/weixin"
+                })
+            },
+            beginCountDown(sec){
+                vm.isSend=true;
+                var num = sec;
+                var t1 = parseInt(new Date().getTime() / 1000);
+                var btn_countDown = setInterval(
+                    function () {
+                        var t2 = parseInt(new Date().getTime() / 1000);
+                        var t_time = (t2 - t1);
+                        if (t_time <= num) {
+                            vm.text = num - t_time + '秒';
+                        } else {
+                            vm.isSend = false;
+                            clearInterval(btn_countDown);
+                            vm.text = '重新发送';
+                        }
+                    }, 1000);
+            },
+            sendcode:function(){
+                var m = "";
+                if(weUtil.isEmpty(vm.info.phone)){
+                    weUtil.msg("请输入手机号");
+                    return;
+                }
+                if(vm.isSend){return};
+                weUtil.post("/weixin/sendSmsCode",{"mobile":vm.info.phone},function (res) {
+                     //开启倒计时
+                     vm.beginCountDown(120);
+                })
+            },
+            open:function(){
+                vm.info.openId = weUtil.getUrlParam("openId");
+                location.href = "/weixin/login?openId="+vm.info.openId;
+            }
+
+        },
+        mounted:async function() {
+            vm = this;
+
+        },
+        updated: function () {
+        }
+    })
+
+
+</script>
+</body>
+</html>

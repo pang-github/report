@@ -1,0 +1,1 @@
+package com.sweet.core.task;import com.sweet.core.util.SpringContextUtil;import org.apache.shiro.mgt.SecurityManager;public class ShiroQuartz {}

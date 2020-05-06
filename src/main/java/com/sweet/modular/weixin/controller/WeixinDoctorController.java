@@ -1,0 +1,1 @@
+package com.sweet.modular.weixin.controller;import org.springframework.stereotype.Controller;@Controllerpublic class WeixinDoctorController {}

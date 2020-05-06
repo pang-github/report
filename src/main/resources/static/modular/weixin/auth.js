@@ -1,0 +1,1 @@
+var ua = navigator.userAgent.toLowerCase();var isWeixin = ua.indexOf('micromessenger') != -1;if (!isWeixin) {    window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe5c669f557bf72e5"}
