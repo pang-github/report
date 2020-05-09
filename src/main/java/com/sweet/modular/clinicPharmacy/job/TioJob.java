@@ -24,7 +24,7 @@ public class TioJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         QueryWrapper<ClinicPharmacy> queryWrapper =new QueryWrapper<>();
         queryWrapper.eq("state_type","0");
-        int s = clinicPharmacyService.count();
+        int s = clinicPharmacyService.count(queryWrapper);
 
         String message = "tips:"+s ;
         Tio.sendToAll(bootstrap.getServerGroupContext(), WsResponse.fromText(message,"utf-8"));

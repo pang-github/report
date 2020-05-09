@@ -1,167 +1,193 @@
 <% layout("/common/_container.html"){ %>
 
-<div class="layui-fluid" id="app">
-    <div class="layui-card-body">
+<style>
+    /*解决页面刷新闪烁变量*/
+    [v-cloak] {
+        display: none !important;
+    }
+</style>
+
+<div class="layui-fluid" id="app" v-cloak >
+    <div class="layui-card-body layui-col-md9 ">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 35px;">
             <legend>处方药表</legend>
         </fieldset>
 
-        <div class="layui-row layui-col-space15 ">
-            <div class="layui-col-md9 layui-col-space10">
-                <div class="layui-col-md12 ">
-                    <div class="layui-card layui-anim layui-anim-scale">
-                        <!--                    <div class="layui-card-header">卡片面板</div>-->
-                        <div class="layui-card-body">
-                            {{rxdrugList.patientName}} <br>
-                        </div>
-                    </div>
+        <div id="ber" v-if="rxdrugList!=''"  >
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <span class="layui-col-md3">{{rxdrugList.patientName==null?" ":'姓名 : '+rxdrugList.patientName}} </span>
+                    <span class="layui-col-md3">{{rxdrugList.checkTime==null?" ":'诊断时间 : '+rxdrugList.checkTime}} </span>
+                    <br>
                 </div>
-                <div v-for="itme in rxdrugList.drugList" class="layui-col-md3 ">
-                    <div class="layui-card layui-anim layui-anim-scale">
-                        <!--                    <div class="layui-card-header">卡片面板</div>-->
-                        <div class="layui-card-body">
-                            {{itme.drugName}} ：{{itme.drugNumber}}{{itme.drugUnit}}<br>
-                        </div>
+                <div class="layui-card-body">
+
+                    <span>{{rxdrugList.stateType==null?" ":''+rxdrugList.stateType}} </span>
+                    <span class="layui-col-md3">{{'诊断医生 : '+rxdrugList.checkDoctor}} </span>
+                </div>
+            </div>
+            <div v-for="itme in rxdrugList.drugList" class="layui-card layui-col-md3 ">
+                <div class="layui-anim layui-anim-scale">
+                    <!--                    <div class="layui-card-header">卡片面板</div>-->
+                    <div class="layui-card-body">
+                        {{itme.drugName}} ：{{itme.drugNumber}}{{itme.drugUnit}}<br>
                     </div>
                 </div>
             </div>
-
-
-            <div class="layui-col-md3">
-                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-                    <legend>抓药记录</legend>
-                    <div class="layui-form layui-form-item" pane="">
-                        <label class="layui-form-label">开关-开</label>
-                        <div class="layui-input-block">
-                            <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest" title="开关">
-                        </div>
-                    </div>
-                </fieldset>
-
-                <ul class="layui-timeline layui-anim layui-anim-up" id="recordTime">
-
-                    <li v-for="itme in pharmacyList" class="layui-timeline-item layui-anim layui-anim-up" @click="getTio(itme.recordId)">
-                        <i class="layui-icon layui-timeline-axis"></i>
-                        <div class="layui-timeline-content layui-text">
-                            <h3 class="layui-timeline-title">{{itme.createTime}}</h3>
-                            <div class="layui-card">
-                                <div v-if="itme.stateType=='0'" class="layui-card-header">
-                                    <span  class="layui-badge-dot" style="right:5px;"></span>
-                                    需要配置</div>
-                                <div v-if="itme.stateType=='1'" class="layui-card-header">
-                                    <span  class="layui-badge-dot layui-bg-green" style="right:5px;"></span>
-                                    配置完成</div>
-                                <div class="layui-card-body">
-                                    药物信息
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-<!--                    <li class="layui-timeline-item">-->
-<!--                        <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>-->
-<!--                        <div class="layui-timeline-content layui-text">-->
-<!--                            <div class="layui-timeline-title">过去</div>-->
-<!--                        </div>-->
-<!--                    </li>-->
-                </ul>
+            <div v-if="stateType=='0'" class="layui-row">
+                <button class="layui-btn" @click="setType(rxdrugList.id)">配置完成</button>
             </div>
-
-            <!--            <div class="layui-col-md12">-->
-            <!--                <div class="layui-card">-->
-            <!--                    <div class="layui-card-header">标题</div>-->
-            <!--                    <div class="layui-card-body">-->
-            <!--                        内容-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
         </div>
     </div>
+
+    <div class="layui-card-body layui-col-md3" style="left: 10px">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+            <legend>抓药记录</legend>
+<!--            <div class="layui-form layui-form-item" pane="">-->
+<!--                <label class="layui-form-label">开关-开</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest"-->
+<!--                           title="开关">-->
+<!--                </div>-->
+<!--            </div>-->
+        </fieldset>
+
+        <ul class="layui-timeline layui-anim layui-anim-up" id="recordTime">
+
+            <li v-for="itme in pharmacyList" class="layui-timeline-item layui-anim layui-anim-up"
+                @click="getTio(itme)">
+                <i class="layui-icon layui-timeline-axis"></i>
+                <div class="layui-timeline-content layui-text">
+                    <h3 class="layui-timeline-title">{{itme.createTime}}</h3>
+                    <div class="layui-card">
+                        <div v-if="itme.stateType=='0'" class="layui-card-header">
+                            <span class="layui-badge-dot" style="right:5px;"></span>
+                            需要配置
+                        </div>
+                        <div v-if="itme.stateType=='1'" class="layui-card-header">
+                            <span class="layui-badge-dot layui-bg-green" style="right:5px;"></span>
+                            配置完成
+                        </div>
+                        <div class="layui-card-body">
+                            药物信息
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
 </div>
+
 
 <script>
     var vm = new Vue({
         el: '#app',
         data: {
             msg: 'Hello World!',
-            info:{},
-            pharmacyList:'',
-            addTime:'',
-            rxdrugList:'',
+            info: {},
+            pharmacyList: '',
+            addTime: '',
+            rxdrugList: '',
+            stateType: '',
         },
-        computed:{
-        },
+        computed: {},
         methods: {
-            getDetail:async function(id){
-                vm.info = await request.fetch("getRxdrugDetail",{id:id});
+            getDetail: async function (id) {
+                vm.info = await request.fetch("getRxdrugDetail", {id: id});
                 form.val('rxdrugForm', vm.info);
             },
-            back:function(){
+            back: function () {
                 location.href = 'rxdrug_list';
             },
-            getDic:async function(){
-                var data = {
-                }
+            getDic: async function () {
+                var data = {}
                 var res = await api.getDictList(data);
             },
-            getTio:function(id){
-                var data= {"id":id}
-                request.post("/admin/clinicPharmacy/getRecordList",data).then(res=>{
-
+            getTio: function (id) {
+                var data = {"id": id.recordId}
+                request.post("/admin/clinicPharmacy/getRecordList", data).then(res => {
                     vm.rxdrugList = res
-                        // .drugList
-                    console.log(res)
+                    vm.stateType = id.stateType
                 })
             },
 
-            getlist:async function(){
-                request.post("/admin/clinicPharmacy/getPharmacyList").then(res=>{
+            getlist: async function () {
+                request.post("/admin/clinicPharmacy/getPharmacyList").then(res => {
                     vm.pharmacyList = res;
                 })
             },
-            getById:async function(id){
-                request.post('/admin/clinicPharmacy/getPharmacyById',{'id':id}).then(res=>{
+            getById: async function (id) {
+                request.post('/admin/clinicPharmacy/getPharmacyById', {'id': id}).then(res => {
                     vm.addTime = res;
                     //vm.addend(res)
                     vm.pharmacyList.unshift(res)
                 })
             },
-            openTio:function(){
+            openTio: function () {
                 request.post('/admin/clinicPharmacy/tioJob')
             },
-            handleScroll () {
-                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-                console.log(scrollTop)
-                    var offsetTop = document.querySelector('#searchBar').offsetTop
-                    if (scrollTop > offsetTop) {
-                        this.searchBarFixed = true
-                    } else {
-                        this.searchBarFixed = false
-                    }
+
+
+            // 滚动条事件
+            handleScroll() {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop ||
+                    document.body.scrollTop
+
+                let editorNav = $("#ber")
+
+                // 判断滚动条的高度（大于240，给固定元素添加 class）
+                if (scrollTop > 240) {
+                    editorNav.addClass('suspension')
+                    editorNav.addClass('layui-col-md9')
+                } else {
+                    editorNav.removeClass('suspension')
+                    editorNav.removeClass('layui-col-md9')
+                }
             },
+            setType: function (id) {
+                console.log(id)
+                request.post('/admin/clinicPharmacy/setPharmacyType', {'id': id}).then(res => {
+                    if (res) {
+                        vm.stateType = 1
+                        vm.rxdrugList.stateType = '配药完成'
+                        var list = new Array()
+                        for (let s of vm.pharmacyList) {
+                            if (s.recordId == id) {
+                                s.stateType = 1
+                            }
+                            list.push(s)
+                        }
+                        vm.pharmacyList = list
+                    }
+                })
+            }
+            // // 销毁事件监听
+            // beforeDestroy() {
+            //     document.removeEventListener('scroll', this.listenerFunction)
+            // }
         },
-        mounted:async function() {
-
+        mounted: async function () {
             vm = this;
-            await  vm.getlist()
-
-            var uid = parseInt(Math.random()*10000);
+            await vm.getlist()
             var url = "ws://localhost:9876";
-            var ws =new WebSocket(url);
-            ws.onopen=function(res){
+            var ws = new WebSocket(url);
+            ws.onopen = function (res) {
 
             }
-            ws.onmessage=function (res) {
+            ws.onmessage = function (res) {
                 var split = res.data.split(':')
-                if(split[0]=="tips"){
-                    layer.msg(res.data.split(':')[1]+'条需要配置', {
+                if (split[0] == "tips") {
+                    layer.msg(res.data.split(':')[1] + '条需要配置', {
                         offset: '6px',
-                });
-                } if(split[0]=="id"){
+                    });
+                }
+                if (split[0] == "id") {
                     vm.getById(split[1])
                 }
 
             }
-            ws.onclose=function(res){
+            ws.onclose = function (res) {
                 console.log("关闭")
             }
 
@@ -169,15 +195,13 @@
 
         },
         updated: function () {
-            layui.use('form', function(){
+            layui.use('form', function () {
                 var form = layui.form;
-
-                form.on('switch(switchTest)', function(data){
+                form.on('switch(switchTest)', function (data) {
                     // layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
                     //     offset: '6px'
                     // });
                     layer.tips(this.checked ? '实时接收信息' : '关闭接收信息', data.othis)
-
                 });
             });
             form.render();
@@ -189,8 +213,17 @@
 <% } %>
 
 <style>
-    .layui-input-inline{
-        min-width:350px !important;
+
+    .layui-input-inline {
+        min-width: 350px !important;
+    }
+
+    .suspension {
+        top: 66px;
+        z-index: 99999;
+        position: fixed;
+        border-top: 1px solid #eee;
+        width: calc(70%);
     }
 
 
