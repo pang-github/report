@@ -42,7 +42,7 @@
 
     <div class="layui-card-body layui-col-md3" style="left: 10px">
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-            <legend>抓药记录</legend>
+            <legend>今日列表</legend>
 <!--            <div class="layui-form layui-form-item" pane="">-->
 <!--                <label class="layui-form-label">开关-开</label>-->
 <!--                <div class="layui-input-block">-->
@@ -178,7 +178,7 @@
             ws.onmessage = function (res) {
                 var split = res.data.split(':')
                 if (split[0] == "tips") {
-                    layer.msg(res.data.split(':')[1] + '条需要配置', {
+                    layer.msg("今日有"+res.data.split(':')[1] + '条需要配置', {
                         offset: '6px',
                     });
                 }

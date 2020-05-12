@@ -23,7 +23,7 @@ public class TioJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         QueryWrapper<ClinicPharmacy> queryWrapper =new QueryWrapper<>();
-        queryWrapper.eq("state_type","0");
+        queryWrapper.eq("state_type","0").eq("create_time",new Date());
         int s = clinicPharmacyService.count(queryWrapper);
 
         String message = "tips:"+s ;

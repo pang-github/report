@@ -44,6 +44,6 @@ public class WsController {
 
 		Tio.sendToAll(bootstrap.getServerGroupContext(), WsResponse.fromText(message,"utf-8"));
 
-		return "这是嘛";
+		return "";
 	}
 }

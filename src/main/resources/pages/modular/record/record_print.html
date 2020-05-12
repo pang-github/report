@@ -16,68 +16,68 @@
     <div class="layui-card">
         <div id="app" class="layui-card-body">
             <form   id="busiPatientForm" lay-filter="busiPatientForm" class="layui-form model-form" style="width: 100%;height: 500px">
-                    <table class="layui-table">
-                        <tr>
-                            <td class="ddtb"  colspan="6">
-
-                                <font style="margin-left: 15px;vertical-align:middle" color="black" size="5px" >康华国医馆</font>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6"><font color="black" ><p style="float: right;width:30px;border: 0.4mm solid #4F4F4F">傳承</p></font></td>
-                        </tr>
-                        <tr>
-                            <td>姓名:</td>
-                            <td>{{busiPatientdata.patientName}}</td>
-                            <td>性别:</td>
-                            <td>{{busiPatientdata.patientSex}}</td>
-                            <td>年龄:</td>
-                            <td>{{busiPatientdata.patientAge}}</td>
-                        </tr>
-                        <tr>
-                            <td>科别:</td>
-                            <td></td>
-                            <td>住院号:</td>
-                            <td></td>
-                            <td>日期:</td>
-                            <td>{{busiRecorddata.checkTime}}</td>
-                        </tr>
-                        <tr>
-                            <td>临床诊断:</td>
-                            <td colspan="5">{{busiRecorddata.diagnose}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">Rp:</td>
-                        </tr>
-                        <tr >
-                            <td colspan="6" >
-                                <p v-for="item in rxdrug_list">{{item.drugName}}{{item.drugNumber}}{{item.drugUnit}},</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5"><span style="float: right">医师:</span></td>
-                            <td>{{busiRecorddata.checkDoctor}}</td>
-                        </tr>
-                        <tr>
-                            <td>审核:</td>
-                            <td></td>
-                            <td>核对:</td>
-                            <td colspan="3"></td>
-                        </tr>
-                        <tr>
-                            <td>调配:</td>
-                            <td></td>
-                            <td>发药:</td>
-                            <td></td>
-                            <td>药费:</td>
-                            <td>{{busiRecorddata.drugMoney}}&nbsp;&nbsp;元</td>
-                        </tr>
-                        <tr style="display: none">
-                            <td colspan="10">
+                <table class="layui-table">
+                    <tr>
+                        <td class="ddtb"  colspan="6">
+                            <img src="/common/images/ningshoutang.png" style="width:40px;height: 40px;">
+                            <font style="margin-left: 15px;vertical-align:middle" color="black" size="5px" >宁寿堂传统中医</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6"><font color="black" ><p style="float: right;width:30px;border: 0.4mm solid #4F4F4F">傳承</p></font></td>
+                    </tr>
+                    <tr>
+                        <td>姓名:</td>
+                        <td>{{busiPatientdata.patientName}}</td>
+                        <td>性别:</td>
+                        <td>{{busiPatientdata.patientSex}}</td>
+                        <td>年龄:</td>
+                        <td>{{busiPatientdata.patientAge}}</td>
+                    </tr>
+                    <tr>
+                        <td>科别:</td>
+                        <td></td>
+                        <td>住院号:</td>
+                        <td></td>
+                        <td>日期:</td>
+                        <td>{{busiRecorddata.checkTime}}</td>
+                    </tr>
+                    <tr>
+                        <td>临床诊断:</td>
+                        <td colspan="5">{{busiRecorddata.diagnose}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6">Rp:</td>
+                    </tr>
+                    <tr >
+                        <td colspan="6" >
+                            <p v-for="item in rxdrug_list">{{item.drugName}}{{item.drugNumber}}{{item.drugUnit}},</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"><span style="float: right">医师:</span></td>
+                        <td>{{busiRecorddata.checkDoctor}}</td>
+                    </tr>
+                    <tr>
+                        <td>审核:</td>
+                        <td></td>
+                        <td>核对:</td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <td>调配:</td>
+                        <td></td>
+                        <td>发药:</td>
+                        <td></td>
+                        <td>药费:</td>
+                        <td>{{busiRecorddata.drugMoney}}&nbsp;&nbsp;元</td>
+                    </tr>
+                    <tr style="display: none">
+                        <td colspan="10">
                             <h2 class="layui-text" style="font-size: 17px;" v-if="busiRecorddata.length==0">暂无相关产品</h2>
-                            </td>
-                        </tr>
-                    </table>
+                        </td>
+                    </tr>
+                </table>
             </form>
         </div>
     </div>
