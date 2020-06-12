@@ -154,7 +154,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(trees.size()>0){
             for (int i= 0;i<trees.size();i++){
                 layMenu menu = trees.get(i);
-                if(menu.getParentId().equals("0")){
+                if("0".equals(menu.getParentId())){
                     newtrees.add(menu);
                     cloneTree.remove(menu);
                 }
@@ -170,8 +170,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     public ArrayList<layMenu> coverMenu(ArrayList<layMenu> trees, ArrayList<layMenu> tempTrees){
-        if(trees.size()==0)return trees;
-        if(tempTrees.size()==0)return tempTrees;
+        if(trees.size()==0) {
+            return trees;
+        }
+        if(tempTrees.size()==0) {
+            return tempTrees;
+        }
         ArrayList<layMenu> layTrees = new ArrayList<layMenu>();
         ArrayList<layMenu> tempLayTrees = (ArrayList<layMenu>) tempTrees.clone();
         for(layMenu node:trees){

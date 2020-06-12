@@ -42,8 +42,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     public  ArrayList<layTree> coverLayuiTree(ArrayList<layTree> trees, ArrayList<layTree> tempTrees){
-        if(trees.size()==0)return trees;
-        if(tempTrees.size()==0)return tempTrees;
+        if(trees.size()==0) {
+            return trees;
+        }
+        if(tempTrees.size()==0) {
+            return tempTrees;
+        }
         ArrayList<layTree> layTrees = new ArrayList<layTree>();
         ArrayList<layTree> tempLayTrees = (ArrayList<layTree>) tempTrees.clone();
         for(layTree node:trees){
@@ -52,7 +56,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                     if(node.getChildren()==null){
                         node.setChildren(new ArrayList<layTree>());
                     }
-                    if(temp.getPid().equals("0")){
+                    if("0".equals(temp.getPid())){
                         temp.setSpread(true);
                     }
                     node.getChildren().add(temp);
@@ -74,7 +78,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         if(trees.size()>0){
             for (int i= 0;i<trees.size();i++){
                 MenuResult menu = trees.get(i);
-                if(menu.getParentId().equals("0")){
+                if("0".equals(menu.getParentId())){
                     newtrees.add(menu);
                     cloneTree.remove(menu);
                 }
@@ -87,8 +91,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     public  ArrayList<MenuResult> coverMenu(ArrayList<MenuResult> trees, ArrayList<MenuResult> tempTrees){
-        if(trees.size()==0)return trees;
-        if(tempTrees.size()==0)return tempTrees;
+        if(trees.size()==0) {
+            return trees;
+        }
+        if(tempTrees.size()==0) {
+            return tempTrees;
+        }
         ArrayList<MenuResult> layTrees = new ArrayList<MenuResult>();
         ArrayList<MenuResult> tempLayTrees = (ArrayList<MenuResult>) tempTrees.clone();
         for(MenuResult node:trees){

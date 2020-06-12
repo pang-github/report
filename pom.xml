@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sweet</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>report</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sweet</name>
+    <name>report</name>
     <description>Demo project for Spring Boot</description>
 
     <packaging>war</packaging>
@@ -235,10 +235,18 @@
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
+
+<!--            &lt;!&ndash;删除配置文件&ndash;&gt;-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <excludes>-->
+<!--                    <exclude>**/*.yml</exclude>-->
+<!--                </excludes>-->
+<!--            </resource>-->
         </resources>
 
 
-        <finalName>sweet</finalName>
+        <finalName>report</finalName>
     </build>
 
 
