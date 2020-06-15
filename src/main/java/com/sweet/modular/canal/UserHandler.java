@@ -34,7 +34,7 @@ public class UserHandler implements EntryHandler<User> {
 
         logger.info("insert message  {}", user);
         int id = user.getId();
-        int id = user.getId();s
+        int ids = user.getId();
         String name = user.getUserName();
 
         tUserService.setIds(id,name);
